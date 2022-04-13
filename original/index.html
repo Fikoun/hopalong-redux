@@ -104,6 +104,7 @@
             setTimeout('document.location = "' + link.href + '"', 100);
         }
     </script>
+    <script src="./assets/controller.js"></script>
     <style type="text/css"
         data-fbcssmodules="css:fb.css.base css:fb.css.dialog css:fb.css.iframewidget css:fb.css.customer_chat_plugin_iframe">
         .fb_hidden {
@@ -721,13 +722,14 @@
         /*
          * AUTHOR: Iacopo Sassarini
          */
+        window.onload = () => Controller.init();
 
         if (!Detector.webgl) Detector.addGetWebGLMessage();
 
         var VISUALS_VISIBLE = true;
 
         var SCALE_FACTOR = 1500;
-        var CAMERA_BOUND = 200;
+        var CAMERA_BOUND = 500;
 
         var NUM_POINTS_SUBSET = 32000;
         var NUM_SUBSETS = 7;
@@ -853,11 +855,14 @@
             window.addEventListener('resize', onWindowResize, false);
 
             // Schedule orbit regeneration
-            setInterval(updateOrbit, 3000);
+            setInterval(updateOrbit, 1000);
+
+            // STOP ALL INTERVAL WHEN INJECTING.
         }
 
         function animate() {
             requestAnimationFrame(animate);
+            Controller.render();
             render();
             stats.update();
         }
@@ -927,6 +932,7 @@
             var xMin = 0, xMax = 0, yMin = 0, yMax = 0;
             var choice;
             choice = Math.random();
+           // [dl, bl, x, cl] = Controller.getPattern();
 
             for (var s = 0; s < NUM_SUBSETS; s++) {
 
@@ -946,7 +952,6 @@
                     }
                     else if (choice < 0.75) {
                         z = (dl + Math.sqrt(Math.sqrt(Math.abs(bl * x - cl))));
-
                     }
                     else {
                         z = (dl + Math.log(2 + Math.sqrt(Math.abs(bl * x - cl))));
@@ -992,6 +997,7 @@
 
         function prepareOrbit() {
             shuffleParams();
+            // sem zmeny orbity
             orbit.xMin = 0;
             orbit.xMax = 0;
             orbit.yMin = 0;
@@ -1038,7 +1044,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        function onKeyDown(event) {
+        function onKeyDown(event) {    
             if (event.keyCode == 38 && speed < 20) speed += .5;
             else if (event.keyCode == 40 && speed > 0) speed -= .5;
             else if (event.keyCode == 37) rotationSpeed += .001;
@@ -1149,7 +1155,8 @@
                     width="450px" height="1000px" data-testid="fb:like Facebook Social Plugin"
                     title="fb:like Facebook Social Plugin" frameborder="0" allowtransparency="true"
                     allowfullscreen="true" scrolling="no" allow="encrypted-media" src="./assets/like.html"
-                    style="border: none; visibility: visible; width: 0px; height: 0px;"></iframe></span></div>
+                    style="border: none; visibility: visible; width: 0px; height: 0px;"></iframe></span>
+        </div>
     </div>
     <div id="tweet">
         <iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" allowfullscreen="true"

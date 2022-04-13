@@ -36,6 +36,13 @@ export default function App({ stats, settings, onSettingsChange, onCenter, onRes
   useEffect(() => {
     document.addEventListener('mousemove', showToolbar);
     document.addEventListener('touchmove', showToolbar);
+
+    gameControl.on('connect', function(gamepad) {
+      console.log(gamepad);
+
+      gamepad.on('down', console.log);
+    });
+  
     setToolbarTimeout();
   });
 
